@@ -39,7 +39,7 @@ const Table = ({ starships }) => {
   return (
     <div className="table">
       <TableHeader />
-      {starships.map((starship, idx) => <TableRow key={idx} starship={starship} />)}
+      {starships.map((starship, idx) => <TableRow key={idx} starship={starship} index={idx} />)}
     </div>
   )
 };

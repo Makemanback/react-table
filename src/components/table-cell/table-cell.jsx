@@ -1,27 +1,30 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { updateStarship } from "../../store/starships/starships-reducer";
+import { useSelector, useDispatch } from "react-redux";
+import { updateItem } from "../../store/starships/starships-reducer";
 
-const TableCell = ({ url, item }) => {
+const TableCell = ({ url, item, index }) => {
+  const dispatch = useDispatch();
+  const [name] = Object.keys(item)
 
-  const [[name, value]] = Object.entries(item)
 
-  const [state, setState] = useState(value);
+  const itemValue = useSelector(({ starships }) => starships[name][index]);
 
   const updateHandler = ({ target }) => {
     const { value } = target;
     const selectedFields = document.querySelectorAll(`.ui-selected`);
 
-
     if (selectedFields.length) {
-      selectedFields.forEach((item) => {
-        const input = item.children[0];
-        input.value = value;
+      selectedFields.forEach(({ dataset }) => {
+        const { id, name: listName } = dataset;
+        
+        if (listName === name) {
+          dispatch(updateItem({ value, listName, url: id }));
+        }
       })
-    } 
-    setState(value)
-
+    } else {
+      dispatch(updateItem({ value, listName: name, url }));
+    }
   }
+
 
   return (
     <div
@@ -29,7 +32,7 @@ const TableCell = ({ url, item }) => {
       data-name={name}
       className="table__cell ui-selectable">
       <input
-        value={state}
+        value={itemValue ? itemValue.value : `loading...`}
         onChange={updateHandler}
         type="text" />
     </div>

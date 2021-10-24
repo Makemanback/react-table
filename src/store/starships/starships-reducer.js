@@ -3,34 +3,46 @@ import { createSlice } from '@reduxjs/toolkit';
 export const starshipsSlice = createSlice({
   name: 'starships',
   initialState: {
-    starships: null
+    starships: null,
+    cargo_capacity: [],
+    cost_in_credits: [],
+    max_atmosphering_speed: [],
+    name: [],
   },
   reducers: {
     setStarships: (state, action) => { state.starships = action.payload },
-    updateStarship: (state, action) => {
-      const { value, fieldName, url } = action.payload
-      const updatingItem = state.starships.find(starship => starship.url === url);
-      const updatingIndex = state.starships.findIndex(starship => starship.url === url);
+    setItemsList: (state, action) => {
+      const { listName, list } = action.payload
+      state[listName] = list
+    },
+    updateItem: (state, action) => {
+      const { value, listName, url } = action.payload
+
+      const updatingItem = state[listName]
+        .find(listItem => listItem.url === url);
+
+      const updatingIndex = state[listName]
+        .findIndex(listItem => listItem.url === url);
 
       if (updatingIndex < 0) {
         throw new Error(`no such index`);
       }
 
-      updatingItem[fieldName] = value;
+      updatingItem.value = value;
 
-      state.starships = [
-        ...state.starships.slice(0, updatingIndex),
+      state[listName] = [
+        ...state[listName].slice(0, updatingIndex),
         updatingItem,
-        ...state.starships.slice(updatingIndex + 1),
+        ...state[listName].slice(updatingIndex + 1),
       ]
-
-    }
+    },
   },
 })
 
 export const {
   setStarships,
-  updateStarship
+  setItemsList,
+  updateItem
 } = starshipsSlice.actions;
 
 export default starshipsSlice.reducer;
