@@ -21,11 +21,16 @@
 
   input {
     border: none;
-    width: 90%;
+    width: 80%;
     height: 26px;
 
     &:focus {
       outline: none;
     }
   }
+}
+
+.ui-selected,
+.ui-selected > input {
+  background-color: #ebf4fc;
 }
