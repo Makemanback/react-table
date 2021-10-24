@@ -13,6 +13,7 @@
     "react-redux": "^7.2.5",
     "react-scripts": "4.0.3",
     "sass": "^1.43.3",
+    "selectable.js": "^0.17.8",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

@@ -1,27 +1,37 @@
 import axios from 'axios';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setStarships } from '../../store/starships/starships-reducer';
 import Table from '../table/table';
 
 const App = () => {
   const dispatch = useDispatch();
+  const starships = useSelector(({ starships }) => starships.starships);
+
 
   useEffect(() => {
-    const getNews = async () => {
-      const {data} = await axios({
-        method: `get`,
-        url: `http://swapi.dev/api/vehicles`
-      })
+    if (!starships) {
+      const getNews = async () => {
+        const { data } = await axios({
+          method: `get`,
+          url: `http://swapi.dev/api/vehicles`
+        })
 
-      dispatch(setStarships(data.results))
+        dispatch(setStarships(data.results))
+      }
+
+      getNews();
     }
-    getNews();
-  }, [])
+  }, [starships])
 
   return (
-    <div className="App">
-      <Table />
+    <div className="app">
+      {
+        starships
+          ? <Table starships={starships} />
+          : <div>loading...</div>
+      }
+
     </div>
   );
 }
